@@ -70,6 +70,8 @@ export interface Config {
     users: User;
     media: Media;
     projects: Project;
+    artworks: Artwork;
+    companies: Company;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +82,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    artworks: ArtworksSelect<false> | ArtworksSelect<true>;
+    companies: CompaniesSelect<false> | CompaniesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -125,6 +129,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  username: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -150,7 +155,8 @@ export interface User {
  */
 export interface Media {
   id: number;
-  alt: string;
+  alt?: string | null;
+  user?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -170,7 +176,87 @@ export interface Media {
 export interface Project {
   id: number;
   title: string;
-  description?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  thumbnail?: (number | null) | Media;
+  company?: (number | null) | Company;
+  user: number | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies".
+ */
+export interface Company {
+  id: number;
+  name: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  location?: string | null;
+  role?: string | null;
+  timeRange?: {
+    isPresent?: boolean | null;
+    startDate?: string | null;
+    endDate?: string | null;
+  };
+  logo?: (number | null) | Media;
+  projects?: (number | Project)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "artworks".
+ */
+export interface Artwork {
+  id: number;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  thumbnail?: (number | null) | Media;
+  project: number | Project;
+  user: number | User;
+  images?: (number | Media)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -209,6 +295,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'artworks';
+        value: number | Artwork;
+      } | null)
+    | ({
+        relationTo: 'companies';
+        value: number | Company;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -257,6 +351,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  username?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -280,6 +375,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  user?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -299,6 +395,44 @@ export interface MediaSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  thumbnail?: T;
+  company?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "artworks_select".
+ */
+export interface ArtworksSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  thumbnail?: T;
+  project?: T;
+  user?: T;
+  images?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies_select".
+ */
+export interface CompaniesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  location?: T;
+  role?: T;
+  timeRange?:
+    | T
+    | {
+        isPresent?: T;
+        startDate?: T;
+        endDate?: T;
+      };
+  logo?: T;
+  projects?: T;
   updatedAt?: T;
   createdAt?: T;
 }

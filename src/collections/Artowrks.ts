@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload'
 
-export const Projects: CollectionConfig = {
-  slug: 'projects',
+export const Artworks: CollectionConfig = {
+  slug: 'artworks',
   admin: {
     useAsTitle: 'title',
   },
@@ -24,9 +24,14 @@ export const Projects: CollectionConfig = {
       relationTo: 'media',
     },
     {
-      name: 'company',
+      name: 'project',
       type: 'relationship',
-      relationTo: 'companies',
+      relationTo: 'projects',
+      required: true,
+      admin: {
+        appearance: 'select',
+        placeholder: 'Select a project',
+      },
     },
     {
       name: 'user',
@@ -34,6 +39,15 @@ export const Projects: CollectionConfig = {
       relationTo: 'users',
       defaultValue: ({ user }) => user?.id,
       required: true,
+      admin: {
+        placeholder: 'Select a user',
+      },
+    },
+    {
+      name: 'images',
+      type: 'upload',
+      hasMany: true,
+      relationTo: 'media',
     },
   ],
 }
