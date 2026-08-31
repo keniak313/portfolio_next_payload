@@ -1,8 +1,12 @@
 import { getPayload } from '@/lib/payload'
-import { Artwork, Project } from '@/payload-types'
+import { Artwork, Media, Project } from '@/payload-types'
 import Image from 'next/image'
 
-export default async function UserPage({ params }) {
+type PageProps = {
+  params: Promise<{ username: string }>
+}
+
+export default async function UserPage({ params }: PageProps) {
   const { username } = await params
   const payload = await getPayload()
   console.log(username)
@@ -36,7 +40,6 @@ export default async function UserPage({ params }) {
   return (
     <div>
       <h1>{username}</h1>
-      {console.log(user)}
       <div>
         {user.projects?.docs?.map((p) => {
           const project = p as Project
@@ -45,15 +48,18 @@ export default async function UserPage({ params }) {
               <p>{project.title}</p>
               {project.artworks?.docs?.map((a) => {
                 const artwork = a as Artwork
+                const thumbnail = artwork.thumbnail as Media
                 return (
                   <div key={artwork.id}>
-                    <Image
-                      src={artwork.thumbnail.url}
-                      width={250}
-                      height={250}
-                      alt={artwork.title}
-                      loading="eager"
-                    />
+                    {thumbnail?.url && (
+                      <Image
+                        src={thumbnail?.url}
+                        width={250}
+                        height={250}
+                        alt={artwork.title}
+                        loading="eager"
+                      />
+                    )}
                     {artwork.title}
                   </div>
                 )
