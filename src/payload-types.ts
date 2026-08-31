@@ -77,7 +77,17 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    users: {
+      projects: 'projects';
+    };
+    projects: {
+      artworks: 'artworks';
+    };
+    companies: {
+      projects: 'projects';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -130,6 +140,11 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   username: string;
+  projects?: {
+    docs?: (number | Project)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -148,26 +163,6 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  user?: (number | null) | User;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -193,9 +188,34 @@ export interface Project {
   } | null;
   thumbnail?: (number | null) | Media;
   company?: (number | null) | Company;
+  artworks?: {
+    docs?: (number | Artwork)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   user: number | User;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  user?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -227,7 +247,12 @@ export interface Company {
     endDate?: string | null;
   };
   logo?: (number | null) | Media;
-  projects?: (number | Project)[] | null;
+  projects?: {
+    docs?: (number | Project)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  user: number | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -352,6 +377,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   username?: T;
+  projects?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -397,6 +423,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   description?: T;
   thumbnail?: T;
   company?: T;
+  artworks?: T;
   user?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -433,6 +460,7 @@ export interface CompaniesSelect<T extends boolean = true> {
       };
   logo?: T;
   projects?: T;
+  user?: T;
   updatedAt?: T;
   createdAt?: T;
 }

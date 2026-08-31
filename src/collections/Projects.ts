@@ -28,6 +28,7 @@ export const Projects: CollectionConfig = {
       type: 'relationship',
       relationTo: 'companies',
     },
+    { name: 'artworks', type: 'join', collection: 'artworks', on: 'project', maxDepth: 5 },
     {
       name: 'user',
       type: 'relationship',

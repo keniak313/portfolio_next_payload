@@ -27,5 +27,12 @@ export const Users: CollectionConfig = {
         return true
       },
     },
+    {
+      name: 'projects',
+      type: 'join',
+      collection: 'projects',
+      on: 'user',
+      maxDepth: 5,
+    },
   ],
 }

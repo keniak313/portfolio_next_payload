@@ -48,9 +48,16 @@ export const Companies: CollectionConfig = {
     },
     {
       name: 'projects',
+      type: 'join',
+      collection: 'projects',
+      on: 'company',
+    },
+    {
+      name: 'user',
       type: 'relationship',
-      relationTo: 'projects',
-      hasMany: true,
+      relationTo: 'users',
+      defaultValue: ({ user }) => user?.id,
+      required: true,
     },
   ],
 }
