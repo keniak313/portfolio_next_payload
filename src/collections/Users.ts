@@ -14,7 +14,10 @@ export const Users: CollectionConfig = {
       type: 'text',
       unique: true,
       required: true,
-      validate: (value) => {
+      validate: (value: string | null | undefined) => {
+        if (!value) {
+          return 'Username is required'
+        }
         if (value.length < 3) {
           return 'Username must be at least 3 characters long'
         }
