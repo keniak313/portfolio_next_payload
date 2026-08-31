@@ -1,5 +1,6 @@
 import { getPayload } from '@/lib/payload'
-import { Project } from '@/payload-types'
+import { Artwork, Project } from '@/payload-types'
+import Image from 'next/image'
 
 export default async function UserPage({ params }) {
   const { username } = await params
@@ -16,6 +17,14 @@ export default async function UserPage({ params }) {
 
   const user = data.docs[0]
 
+  if (!data) {
+    return (
+      <div>
+        <p>LOADING...</p>
+      </div>
+    )
+  }
+
   if (!user) {
     return (
       <div>
@@ -31,7 +40,26 @@ export default async function UserPage({ params }) {
       <div>
         {user.projects?.docs?.map((p) => {
           const project = p as Project
-          return <p key={project.id}>{project.title}</p>
+          return (
+            <div key={project.id}>
+              <p>{project.title}</p>
+              {project.artworks?.docs?.map((a) => {
+                const artwork = a as Artwork
+                return (
+                  <div key={artwork.id}>
+                    <Image
+                      src={artwork.thumbnail.url}
+                      width={250}
+                      height={250}
+                      alt={artwork.title}
+                      loading="eager"
+                    />
+                    {artwork.title}
+                  </div>
+                )
+              })}
+            </div>
+          )
         })}
       </div>
     </div>
