@@ -1,5 +1,5 @@
 import { duplicateValidator } from '@/lib/helpers'
-// import { isOwnerOrAdmin } from '@/lib/payload'
+import { isOwnerOrAdmin } from '@/lib/payload'
 import { CollectionConfig } from 'payload'
 import { slugify } from 'payload/shared'
 
@@ -10,9 +10,9 @@ export const Companies: CollectionConfig = {
   },
   access: {
     read: () => true,
-    // update: (args) => isOwnerOrAdmin(args),
-    // create: (args) => isOwnerOrAdmin(args),
-    // delete: (args) => isOwnerOrAdmin(args),
+    update: (args) => isOwnerOrAdmin(args),
+    create: (args) => isOwnerOrAdmin(args),
+    delete: (args) => isOwnerOrAdmin(args),
   },
   fields: [
     {

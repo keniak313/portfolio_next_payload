@@ -1,13 +1,13 @@
-// import { isOwnerOrAdmin } from '@/lib/payload'
+import { isOwnerOrAdmin } from '@/lib/payload'
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
     read: () => true,
-    // update: (args) => isOwnerOrAdmin(args),
-    // create: (args) => isOwnerOrAdmin(args),
-    // delete: (args) => isOwnerOrAdmin(args),
+    update: (args) => isOwnerOrAdmin(args),
+    create: (args) => isOwnerOrAdmin(args),
+    delete: (args) => isOwnerOrAdmin(args),
   },
   fields: [
     {

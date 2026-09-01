@@ -18,7 +18,7 @@ const dirname = path.dirname(filename)
 const blobToken = process.env.BLOB_READ_WRITE_TOKEN
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  // serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     user: Users.slug,
     importMap: {
