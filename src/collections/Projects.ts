@@ -9,9 +9,9 @@ export const Projects: CollectionConfig = {
   },
   access: {
     read: () => true,
-    update: (args) => isOwnerOrAdmin(args),
-    create: (args) => isOwnerOrAdmin(args),
-    delete: (args) => isOwnerOrAdmin(args),
+    // update: (args) => isOwnerOrAdmin(args),
+    // create: (args) => isOwnerOrAdmin(args),
+    // delete: (args) => isOwnerOrAdmin(args),
   },
   fields: [
     {
