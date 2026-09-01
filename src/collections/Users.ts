@@ -1,4 +1,4 @@
-import { isOwnerOrAdmin } from '@/lib/payload'
+// import { isOwnerOrAdmin } from '@/lib/payload'
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {

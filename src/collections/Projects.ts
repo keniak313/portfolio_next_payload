@@ -1,5 +1,5 @@
 import { duplicateValidator, slugify } from '@/lib/helpers'
-import { isOwnerOrAdmin } from '@/lib/payload'
+// import { isOwnerOrAdmin } from '@/lib/payload'
 import { CollectionConfig } from 'payload'
 
 export const Projects: CollectionConfig = {

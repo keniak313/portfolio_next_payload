@@ -1,4 +1,4 @@
-import { TextFieldValidation } from 'payload'
+import { CollectionSlug, TextFieldValidation } from 'payload'
 
 export const slugify = (text: string) => {
   if (!text) return ''
@@ -18,8 +18,8 @@ export const slugify = (text: string) => {
     .replace(/-+$/, '') // Usuwa myślniki z końca
 }
 
-export const duplicateValidator = (collection: string) => {
-  return async (value, { req, operation, id }) => {
+export const duplicateValidator = (collection: CollectionSlug) => {
+  const validation: TextFieldValidation = async (value, { req, operation, id }) => {
     const curUserId = req.user?.id
     if (!curUserId) return 'You must be logged in to create a project'
 
@@ -60,4 +60,6 @@ export const duplicateValidator = (collection: string) => {
 
     return true
   }
+
+  return validation
 }
