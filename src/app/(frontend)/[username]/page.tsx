@@ -2,6 +2,8 @@ import { getPayload } from '@/lib/payload'
 import { Artwork, Media, Project } from '@/payload-types'
 import Image from 'next/image'
 
+export const revalidate = 10
+
 type PageProps = {
   params: Promise<{ username: string }>
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ViewTransition } from 'react'
 // import './styles.css'
 import './globals.css'
 import Header from '@/components/Header'
@@ -27,7 +27,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-dvh flex flex-col justify-between items-center">
         <Header />
-        <main className="flex-1">{children}</main>
+        <ViewTransition>
+          <main className="flex-1">{children}</main>
+        </ViewTransition>
         <Footer />
       </body>
     </html>
