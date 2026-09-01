@@ -10,11 +10,7 @@ export const Users: CollectionConfig = {
     },
   },
   access: {
-    read: ({ req, id }) => {
-      if (req.user?.role === 'admin') return true
-      if (req.user?.id === id) return true
-      return false
-    },
+    read: () => true,
     create: ({ req }) => req.user?.role === 'admin',
     delete: ({ req }) => req.user?.role === 'admin',
   },
