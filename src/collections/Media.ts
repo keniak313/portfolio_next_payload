@@ -1,9 +1,13 @@
+import { isOwnerOrAdmin } from '@/lib/payload'
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    read: () => true,
+    read: (args) => isOwnerOrAdmin(args),
+    update: (args) => isOwnerOrAdmin(args),
+    create: (args) => isOwnerOrAdmin(args),
+    delete: (args) => isOwnerOrAdmin(args),
   },
   fields: [
     {
@@ -36,6 +40,9 @@ export const Media: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       defaultValue: ({ user }) => user?.id,
+      access: {
+        read: ({ req }) => req.user?.role === 'admin',
+      },
     },
   ],
   upload: true,

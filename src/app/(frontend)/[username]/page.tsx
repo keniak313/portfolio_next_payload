@@ -50,7 +50,7 @@ export default async function UserPage({ params }: PageProps) {
                 const artwork = a as Artwork
                 const thumbnail = artwork.thumbnail as Media
                 return (
-                  <div key={artwork.id}>
+                  <a key={artwork.id} href={`/${user.username}/${project.slug}/${artwork.slug}`}>
                     {thumbnail?.url && (
                       <Image
                         src={thumbnail?.url}
@@ -61,7 +61,7 @@ export default async function UserPage({ params }: PageProps) {
                       />
                     )}
                     {artwork.title}
-                  </div>
+                  </a>
                 )
               })}
             </div>

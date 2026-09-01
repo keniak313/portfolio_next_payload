@@ -1,3 +1,5 @@
+import { duplicateValidator, slugify } from '@/lib/helpers'
+import { isOwnerOrAdmin } from '@/lib/payload'
 import { CollectionConfig } from 'payload'
 
 export const Artworks: CollectionConfig = {
@@ -6,13 +8,32 @@ export const Artworks: CollectionConfig = {
     useAsTitle: 'title',
   },
   access: {
-    read: () => true,
+    read: (args) => isOwnerOrAdmin(args),
+    update: (args) => isOwnerOrAdmin(args),
+    create: (args) => isOwnerOrAdmin(args),
+    delete: (args) => isOwnerOrAdmin(args),
   },
   fields: [
     {
       name: 'title',
       type: 'text',
       required: true,
+      validate: duplicateValidator('artworks'),
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      admin: {
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [
+          async ({ data, req }) => {
+            if (!data?.title) return
+            return slugify(data.title)
+          },
+        ],
+      },
     },
     {
       name: 'description',
@@ -41,6 +62,10 @@ export const Artworks: CollectionConfig = {
       required: true,
       admin: {
         placeholder: 'Select a user',
+      },
+      access: {
+        read: ({ req }) => req.user?.role === 'admin',
+        update: ({ req }) => req.user?.role === 'admin',
       },
     },
     {

@@ -1,18 +1,40 @@
+import { duplicateValidator } from '@/lib/helpers'
+import { isOwnerOrAdmin } from '@/lib/payload'
 import { CollectionConfig } from 'payload'
+import { slugify } from 'payload/shared'
 
 export const Companies: CollectionConfig = {
   slug: 'companies',
   admin: {
-    useAsTitle: 'name',
+    useAsTitle: 'title',
   },
   access: {
-    read: () => true,
+    read: (args) => isOwnerOrAdmin(args),
+    update: (args) => isOwnerOrAdmin(args),
+    create: (args) => isOwnerOrAdmin(args),
+    delete: (args) => isOwnerOrAdmin(args),
   },
   fields: [
     {
-      name: 'name',
+      name: 'title',
       type: 'text',
       required: true,
+      validate: duplicateValidator('companies'),
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      admin: {
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [
+          async ({ data, req }) => {
+            if (!data?.title) return
+            return slugify(data.title)
+          },
+        ],
+      },
     },
     {
       name: 'description',
@@ -58,6 +80,9 @@ export const Companies: CollectionConfig = {
       relationTo: 'users',
       defaultValue: ({ user }) => user?.id,
       required: true,
+      access: {
+        read: ({ req }) => req.user?.role === 'admin',
+      },
     },
   ],
 }

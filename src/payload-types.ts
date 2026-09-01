@@ -140,6 +140,30 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   username: string;
+  role?: ('user' | 'admin') | null;
+  thumbnail?: (number | null) | Media;
+  shortBio?: string | null;
+  about?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  skills?:
+    | {
+        skill?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   projects?: {
     docs?: (number | Project)[];
     hasNextPage?: boolean;
@@ -166,11 +190,32 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  user?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
   id: number;
   title: string;
+  slug?: string | null;
   description?: {
     root: {
       type: string;
@@ -199,31 +244,12 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  user?: (number | null) | User;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "companies".
  */
 export interface Company {
   id: number;
-  name: string;
+  title: string;
+  slug?: string | null;
   description?: {
     root: {
       type: string;
@@ -263,6 +289,7 @@ export interface Company {
 export interface Artwork {
   id: number;
   title: string;
+  slug?: string | null;
   description?: {
     root: {
       type: string;
@@ -377,6 +404,16 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   username?: T;
+  role?: T;
+  thumbnail?: T;
+  shortBio?: T;
+  about?: T;
+  skills?:
+    | T
+    | {
+        skill?: T;
+        id?: T;
+      };
   projects?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -420,6 +457,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   description?: T;
   thumbnail?: T;
   company?: T;
@@ -434,6 +472,7 @@ export interface ProjectsSelect<T extends boolean = true> {
  */
 export interface ArtworksSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   description?: T;
   thumbnail?: T;
   project?: T;
@@ -447,7 +486,8 @@ export interface ArtworksSelect<T extends boolean = true> {
  * via the `definition` "companies_select".
  */
 export interface CompaniesSelect<T extends boolean = true> {
-  name?: T;
+  title?: T;
+  slug?: T;
   description?: T;
   location?: T;
   role?: T;
