@@ -6,6 +6,12 @@ export const getPayload = async () => {
 }
 
 export const isOwnerOrAdmin: Access = ({ req: { user } }) => {
+  console.log('DEBUG ACCESS:', {
+    userId: user?.id,
+    role: user?.role,
+    env: process.env.NODE_ENV,
+  })
+
   if (user?.role === 'admin') return true
   if (user) {
     return {
