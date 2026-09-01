@@ -15,7 +15,10 @@ import { Companies } from './collections/Companies'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     user: Users.slug,
     importMap: {
@@ -41,7 +44,7 @@ export default buildConfig({
       collections: {
         media: true,
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+      token: blobToken,
     }),
   ],
 })
